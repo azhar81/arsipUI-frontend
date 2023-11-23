@@ -26,7 +26,6 @@
 </template>
 
 <script>
-// Import axios at the top
 import axios from "axios";
 
 export default {
@@ -59,5 +58,5 @@ export default {
 </script>
 
 <style scoped>
-/* Add your component styles here */
+@import "../assets/landing.css";
 </style>

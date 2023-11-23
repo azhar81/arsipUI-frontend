@@ -1,16 +1,16 @@
 <template>
   <div id="app">
-    <ApiComponent />
+    <LandingPage />
   </div>
 </template>
 
 <script>
-import ApiComponent from "./components/APIComponent.vue";
+import LandingPage from "./components/LandingPage.vue";
 
 export default {
   name: "App",
   components: {
-    ApiComponent,
+    LandingPage,
   },
 };
 </script>
