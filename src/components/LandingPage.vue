@@ -1,5 +1,6 @@
 <template>
   <div>
+    <div class="center-block"></div>
     <div v-if="loading">Loading...</div>
     <div v-else>
       <div class="items-container" v-if="items.length > 0">

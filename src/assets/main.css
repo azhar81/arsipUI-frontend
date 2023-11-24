@@ -1,5 +1,13 @@
 @import "./base.css";
 
+body {
+  margin: 0;
+  padding: 0;
+  background-image: url("../assets/static/Background_Rektorat.png"); /* Update the path */
+  background-size: cover;
+  background-position: center;
+}
+
 #app {
   max-width: 1280px;
   margin: 0 auto;
