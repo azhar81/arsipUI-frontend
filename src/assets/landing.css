@@ -1,3 +1,25 @@
+.center-block {
+  width: 898px;
+  margin: 200px auto 100px;
+  color: #ffffff;
+  text-align: center;
+
+  .tahun-berdiri {
+    font-weight: 400;
+    font-size: 48px;
+  }
+
+  .judul-berdiri {
+    font-weight: 700;
+    font-size: 40px;
+  }
+
+  .isi-berdiri {
+    font-weight: 400;
+    font-size: 16px;
+  }
+}
+
 .items-container {
   display: flex;
   flex-wrap: wrap;
@@ -62,9 +84,6 @@
         color: #000000;
         border-radius: 2px;
       }
-    }
-
-    .reader {
     }
   }
 }

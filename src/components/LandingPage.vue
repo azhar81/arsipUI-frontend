@@ -1,6 +1,16 @@
 <template>
   <div>
-    <div class="center-block"></div>
+    <div class="center-block">
+      <p class="tahun-berdiri">1849</p>
+      <p class="judul-berdiri">Sejarah Berdirinya Universitas Indonesia</p>
+      <p class="isi-berdiri">
+        Awalnya, UI merupakan sekolah kedokteran bernama School of Medicine for
+        Indigenous Doctors atau yang dikenal sebagai STOVIA pada era kolonial
+        Belanda pada tahun 1849. Setelah kemerdekaan, STOVIA beberapa kali
+        berganti nama, salah satunya menjadi Universiteit Indonesia pada tahun
+        1950 dan memiliki 5 fakultas.
+      </p>
+    </div>
     <div v-if="loading">Loading...</div>
     <div v-else>
       <div class="items-container" v-if="items.length > 0">
@@ -43,7 +53,7 @@ export default {
   methods: {
     fetchData() {
       axios
-        .get("http://127.0.0.1:8000/arsip/")
+        .get(import.meta.env.VITE_API_URL)
         .then((response) => {
           this.items = response.data;
           this.loading = false;
