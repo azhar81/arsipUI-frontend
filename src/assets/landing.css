@@ -1,6 +1,6 @@
 .center-block {
   width: 898px;
-  margin: 200px auto 100px;
+  margin: 150px auto 80px;
   color: #ffffff;
   text-align: center;
 
@@ -10,6 +10,7 @@
   }
 
   .judul-berdiri {
+    margin: 20px;
     font-weight: 700;
     font-size: 40px;
   }
@@ -17,6 +18,33 @@
   .isi-berdiri {
     font-weight: 400;
     font-size: 16px;
+  }
+
+  .tombol-berdiri {
+    width: 225px;
+    height: 41px;
+    margin: 10px;
+    background: #fed402;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 16px;
+    color: #000000;
+  }
+}
+
+.items {
+  display: flex;
+  flex-direction: row;
+}
+
+.separate-items {
+  margin: auto;
+
+  .main {
+    font-weight: 700;
+    font-size: 24px;
+
+    color: #ffffff;
   }
 }
 
@@ -27,7 +55,6 @@
 }
 
 .item-container {
-  padding: 10px;
   box-sizing: border-box;
   max-width: 220px;
   flex-direction: column;

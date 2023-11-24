@@ -10,27 +10,64 @@
         berganti nama, salah satunya menjadi Universiteit Indonesia pada tahun
         1950 dan memiliki 5 fakultas.
       </p>
+      <button @click="handleButtonClick" class="tombol-berdiri">
+        Pelajari Lebih Lanjut
+      </button>
     </div>
-    <div v-if="loading">Loading...</div>
-    <div v-else>
-      <div class="items-container" v-if="items.length > 0">
-        <div v-for="item in items" :key="item.id" class="item-container">
-          <img :src="item.file_path" />
-          <div class="title">
-            <h1>{{ item.title }}</h1>
-          </div>
-          <div class="information">
-            <div class="date">
-              <p>{{ item.event_date }}</p>
+    <div class="items">
+      <!-- Popular Items -->
+      <div class="separate-items">
+        <p class="main">Terpopuler</p>
+        <div class="items-container" v-if="popular_items.length > 0">
+          <div
+            v-for="item in popular_items"
+            :key="item.id"
+            class="item-container"
+          >
+            <img :src="item.file_path" />
+            <div class="title">
+              <h1>{{ item.title }}</h1>
             </div>
-            <div class="reader-count">
-              <p>{{ item.reader_count }} pembaca</p>
+            <div class="information">
+              <div class="date">
+                <p>{{ item.event_date }}</p>
+              </div>
+              <div class="reader-count">
+                <p>{{ item.reader_count }} pembaca</p>
+              </div>
             </div>
           </div>
         </div>
+        <div v-else>
+          <p>No data available</p>
+        </div>
       </div>
-      <div v-else>
-        <p>No data available</p>
+      <!-- Latest Items -->
+      <div class="separate-items">
+        <p class="main">Terkini</p>
+        <div class="items-container" v-if="latest_items.length > 0">
+          <div
+            v-for="item in latest_items"
+            :key="item.id"
+            class="item-container"
+          >
+            <img :src="item.file_path" />
+            <div class="title">
+              <h1>{{ item.title }}</h1>
+            </div>
+            <div class="information">
+              <div class="date">
+                <p>{{ item.event_date }}</p>
+              </div>
+              <div class="reader-count">
+                <p>{{ item.reader_count }} pembaca</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div v-else>
+          <p>No data available</p>
+        </div>
       </div>
     </div>
   </div>
@@ -42,9 +79,8 @@ import axios from "axios";
 export default {
   data() {
     return {
-      items: [],
-      loading: true,
-      error: null,
+      popular_items: [],
+      latest_items: [],
     };
   },
   mounted() {
@@ -53,16 +89,25 @@ export default {
   methods: {
     fetchData() {
       axios
-        .get(import.meta.env.VITE_API_URL)
+        .get(import.meta.env.VITE_API_URL + "?sort_by_reader=true&limit=3")
         .then((response) => {
-          this.items = response.data;
-          this.loading = false;
+          this.popular_items = response.data;
         })
         .catch((error) => {
-          this.error = error.message || "Error fetching data";
-          this.loading = false;
           console.error("Error fetching data:", error);
         });
+      axios
+        .get(import.meta.env.VITE_API_URL + "?limit=3")
+        .then((response) => {
+          this.latest_items = response.data;
+        })
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+        });
+    },
+    handleButtonClick() {
+      // Handle button click logic here
+      console.log("Button clicked!");
     },
   },
 };
