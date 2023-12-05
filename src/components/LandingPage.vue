@@ -22,20 +22,10 @@
           <div
             v-for="item in popular_items"
             :key="item.id"
-            class="item-container"
           >
-            <img :src="item.file_path" />
-            <div class="title">
-              <h1>{{ item.title }}</h1>
-            </div>
-            <div class="information">
-              <div class="date">
-                <p>{{ item.event_date }}</p>
-              </div>
-              <div class="reader-count">
-                <p>{{ item.reader_count }} pembaca</p>
-              </div>
-            </div>
+            <SmallMediaContainer
+             :item="item"
+            />
           </div>
         </div>
         <div v-else>
@@ -49,20 +39,8 @@
           <div
             v-for="item in latest_items"
             :key="item.id"
-            class="item-container"
           >
-            <img :src="item.file_path" />
-            <div class="title">
-              <h1>{{ item.title }}</h1>
-            </div>
-            <div class="information">
-              <div class="date">
-                <p>{{ item.event_date }}</p>
-              </div>
-              <div class="reader-count">
-                <p>{{ item.reader_count }} pembaca</p>
-              </div>
-            </div>
+            <SmallMediaContainer :item="item"/>
           </div>
         </div>
         <div v-else>
@@ -75,8 +53,12 @@
 
 <script>
 import axios from "axios";
+import SmallMediaContainer from "./SmallMediaContainer.vue";
 
 export default {
+  components: {
+    SmallMediaContainer,
+  },
   data() {
     return {
       popular_items: [],
