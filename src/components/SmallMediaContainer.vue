@@ -6,7 +6,7 @@
         </div>
         <div class="information">
             <div class="date">
-            <p>{{ item.event.date }}</p>
+            <p>{{ item.upload_date.slice(0,10) }}</p>
             </div>
             <div class="reader-count">
             <p>{{ item.reader_count }} pembaca</p>
@@ -17,9 +17,10 @@
 
 <script>
 export default {
-    props: {
-        item: Object
-    },
+  props: {
+      item: Object
+  },
+
 };
 </script>
 
