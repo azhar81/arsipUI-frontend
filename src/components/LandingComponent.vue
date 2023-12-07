@@ -29,7 +29,7 @@
           </div>
         </div>
         <div v-else>
-          <p>No data available</p>
+          <p>No data found</p>
         </div>
       </div>
       <!-- Latest Items -->
@@ -44,7 +44,7 @@
           </div>
         </div>
         <div v-else>
-          <p>No data available</p>
+          <p>No data found</p>
         </div>
       </div>
     </div>
@@ -71,15 +71,16 @@ export default {
   methods: {
     fetchData() {
       axios
-        .get(import.meta.env.VITE_API_URL + "?sort_by_reader=true&limit=3")
+        .get(import.meta.env.VITE_API_URL + "?sort_by_reader=true&limit=3&status=approved")
         .then((response) => {
           this.popular_items = response.data;
+          console.log(this.popular_items[0].file_paths[0])
         })
         .catch((error) => {
           console.error("Error fetching data:", error);
         });
       axios
-        .get(import.meta.env.VITE_API_URL + "?limit=3")
+        .get(import.meta.env.VITE_API_URL + "?limit=3&status=approved")
         .then((response) => {
           this.latest_items = response.data;
         })

@@ -7,7 +7,7 @@
         :options="['Visi & Misi', 'Etika & Norma', 'Peraturan & Budaya']"
       />
       <router-link to="/">Home</router-link>
-      <router-link to="/about">About</router-link>
+      <router-link to="/detail/1">About</router-link>
       <HamburgerIcon></HamburgerIcon>
     </div>
   </div>
@@ -28,7 +28,4 @@ export default {
 
 <style scoped>
 @import "../assets/navbar.css";
-
-nav-links {
-}
 </style>
