@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="main-div">
     <div class="center-block">
       <p class="tahun-berdiri">1849</p>
       <p class="judul-berdiri">Sejarah Berdirinya Universitas Indonesia</p>
@@ -74,7 +74,6 @@ export default {
         .get(import.meta.env.VITE_API_URL + "?sort_by_reader=true&limit=3&status=approved")
         .then((response) => {
           this.popular_items = response.data;
-          console.log(this.popular_items[0].file_paths[0])
         })
         .catch((error) => {
           console.error("Error fetching data:", error);
@@ -98,4 +97,8 @@ export default {
 
 <style scoped>
 @import "../assets/landing.css";
+
+.main-div {
+  margin-bottom: 100px;
+}
 </style>

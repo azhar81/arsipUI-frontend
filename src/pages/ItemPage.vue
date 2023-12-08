@@ -1,11 +1,13 @@
 <template>
+    <FullImagePopup v-if="showModal" :imageUrl="modalImageUrl" @close="closeModal" />
     <Navbar />
+    <div class="item-page-div">
     <div v-if="loading">Loading...</div>
     <div v-else>
         <div class="main-block">
             <div class="images-block">
                 <div class="main-image-block">
-                    <img :src="main_image.file" class="main-image">
+                    <img :src="main_image.file" @click="openModal(main_image.file)" class="main-image">
                 </div>
                 <div class="small-images-block" v-if="images.length > 0">
                     <div class="scroll-buttons">
@@ -13,7 +15,7 @@
                         <div class="image-list" ref="imageList">
                             <ul>
                                 <li v-for="(image, index) in images" :key="index">
-                                    <img :src="image.file" alt="Small Image" />
+                                    <img :src="image.file" @click="openModal(image.file)" alt="Small Image" />
                                 </li>
                             </ul>
                         </div>
@@ -31,19 +33,17 @@
                                 <p>{{ item.upload_date.slice(0,10) }}</p>
                             </div>
                             <div class="contributor">
-                                <p>Oleh <b class="name">{{ item.contributor.username }}</b> | 
+                                <p>Oleh <em class="name">{{ item.contributor.username }}</em> | 
                                     {{ item.reader_count }} pembaca</p>
                             </div>
                         </div>
                     </div>
-                    <div class="description">
-                        <p>
-                            {{ item.description }}
-                        </p>
+                    <div v-html="item.formatted_content" class="description">
                     </div>
                 </div>
             </div>
         </div>
+    </div>
     </div>
   </template>
   
@@ -51,9 +51,12 @@
 import axios from "axios";
 import Navbar from "../components/Navbar.vue";
 
+import FullImagePopup from '../components/FullImagePopup.vue';
+
 export default {
   components: {
     Navbar,
+    FullImagePopup
   },
   data() {
     return {
@@ -64,8 +67,10 @@ export default {
         scrollAmount: 150,
         imageListWidth: 0,
         showScrollLeftButton: false,
-        showScrollRightButton: true,
+        showScrollRightButton: false,
         loading: true,
+        showModal: false,
+        modalImageUrl: '',
     };
   },
   mounted() {
@@ -80,6 +85,9 @@ export default {
                 this.item = response.data;
                 this.images = this.item.file_paths;
                 this.main_image = this.images.shift();
+                if (this.images.length > 2) {
+                    this.showScrollRightButton = true
+                }
                 this.loading = false;
             })
         .catch((error) => {
@@ -104,21 +112,26 @@ export default {
             this.showScrollRightButton = this.$refs.imageList.scrollLeft < (this.$refs.imageList.scrollWidth - this.$refs.imageList.clientWidth);
         });
     },
+    openModal(imageUrl) {
+        this.modalImageUrl = imageUrl;
+        this.showModal = true;
+    },
+    closeModal() {
+        this.showModal = false;
+    },
   }
 };
 </script>
   
 <style>
-#app, body {
+.item-page-view{
     background-color: #282828;
-    height: 100%;
-    overflow-y: hidden;
 }
 
 .main-block {
   box-sizing: border-box;
   padding: 20px;
-  margin: 80px auto;
+  margin: 8% auto 0 0;
   display: grid;
   grid-template-columns: 50% 50%;
   gap: auto;
@@ -144,7 +157,7 @@ export default {
     .main-image-block {
       .main-image {
         width: 706px;
-        height: auto;
+        max-height: 530px;
       }
     }
 
@@ -296,7 +309,9 @@ export default {
     .description {
         text-align: justify;
         overflow: auto;
-        max-height: 50%px;
+        max-height: 400px;
+        padding-right: 10px;
+        color: #ffffff;
     }
   }
 

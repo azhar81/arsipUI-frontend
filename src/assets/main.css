@@ -3,9 +3,6 @@
 body {
   margin: 0;
   padding: 0;
-  background-image: url("../assets/static/Background_Rektorat.png"); /* Update the path */
-  background-size: cover;
-  background-position: center;
 }
 
 #app {
