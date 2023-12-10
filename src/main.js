@@ -7,6 +7,8 @@ import store from './store.js';
 
 const app = createApp(App);
 
+store.dispatch('initAxios');
+
 app.use(router);
 app.use(store);
 

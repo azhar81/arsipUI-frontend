@@ -1,13 +1,15 @@
 import axios from 'axios';
 
+const storedUser = localStorage.getItem('user')
 const state = {
-    user: null,
+    user: storedUser ? JSON.parse(storedUser) : null,
     token: localStorage.getItem('token') || null,
 };
 
 const mutations = {
     SET_USER(state, user) {
         state.user = user;
+        localStorage.setItem('user', JSON.stringify(user));
     },
     SET_TOKEN(state, token) {
         state.token = token;
@@ -17,6 +19,7 @@ const mutations = {
         state.user = null;
         state.token = null;
         localStorage.removeItem('token');
+        localStorage.removeItem('user');
     },
 };
 
@@ -24,8 +27,7 @@ const actions = {
     async login({ commit }, credentials) {
         try {
         const response = await axios.post(import.meta.env.VITE_API_AUTH_URL, credentials);
-        console.log(response.data)
-        const { user, access: token } = response.data;
+        const { user: user, access: token } = response.data;
 
         commit('SET_USER', user);
         commit('SET_TOKEN', token);
@@ -51,6 +53,32 @@ const actions = {
     logout({ commit }) {
         commit('LOGOUT');
     },
+
+    initAxios() {
+        // Intercept requests to add authentication details
+        axios.interceptors.request.use(
+          (config) => {
+            const token = localStorage.getItem('token');
+            if (token) {
+              config.headers.Authorization = `Bearer ${token}`;
+            }
+            return config;
+          },
+          (error) => {
+            return Promise.reject(error);
+          }
+        );
+    
+        // Intercept responses for additional handling if needed
+        axios.interceptors.response.use(
+          (response) => {
+            return response;
+          },
+          (error) => {
+            return Promise.reject(error);
+          }
+        );
+      },
 };
 
 const getters = {

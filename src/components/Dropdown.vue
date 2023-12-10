@@ -10,6 +10,11 @@
           <button v-if="option.isButton" :style="option.style" class="centered-button">
             {{ option.text }}
           </button>
+          <span v-else-if="option.isProfile" :style="option.style">
+            {{ option.username }}
+            {{ option.userType == 'contributor' ? 'Kontributor' : 'Verifikator' }}
+          </span>
+          <span v-else-if="option.isLogout" @click="onLogout">{{option.text}}</span>
           <span v-else>{{ option.text }}</span>
         </router-link>
       </li>
@@ -18,6 +23,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
 export default {
   data() {
     return {
@@ -30,6 +36,16 @@ export default {
     },
     selectOption() {
       this.isOpen = false;
+    },
+    ...mapActions('auth', ['logout']),
+    async onLogout() {
+      try {
+        await this.logout();
+        this.$router.push('/')
+      } catch (error) {
+        // Handle logout error (display error message, etc.)
+        console.error('Logout error:', error.message);
+      }
     },
   },
   props: {
@@ -47,7 +63,7 @@ export default {
         '--position': this.position,
       }
     }
-  }
+  },
 };
 </script>
 

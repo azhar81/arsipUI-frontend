@@ -16,7 +16,7 @@
         <div v-if="isAuthenticated">
             <!-- Content for authenticated users -->
             <h1>AUTHENTICATED</h1>
-            <h2>{{ user }}</h2>
+            <h2>{{ getUser }}</h2>
             
             <button @click="onLogout">Logout</button>
         </div>
@@ -44,16 +44,13 @@ export default {
   },
   computed: {
     ...mapGetters('auth', ['isAuthenticated', 'getUser']),
-    user() {
-        return this.getUser;
-    },
   },
   methods: {
     ...mapActions('auth', ['login']),
     async onLogin() {
       try {
         await this.login({ username: this.username, password: this.password });
-        // Redirect or perform additional actions after successful login
+        this.$router.push('/')
       } catch (error) {
         // Handle login error
         this.error = "Wrong credentials, try again";
@@ -63,7 +60,6 @@ export default {
     async onLogout() {
       try {
         await this.logout();
-        // Redirect or perform additional actions after successful logout
       } catch (error) {
         // Handle logout error (display error message, etc.)
         console.error('Logout error:', error.message);
