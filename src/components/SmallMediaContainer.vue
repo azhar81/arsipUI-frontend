@@ -29,6 +29,9 @@ export default {
   box-sizing: border-box;
   max-width: 220px;
   flex-direction: column;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
 
   img {
     width: 220px;

@@ -25,15 +25,19 @@
             </div>
             <div class="content-block">
                 <div class="information-block">
-                    <router-link to="/" class="text-link">Beranda</router-link>
+                    <div class="navigation">
+                        <router-link to="/" class="text-link">Beranda</router-link>
+                        <p>➤</p>
+                        <p><b> {{ item.title }}</b></p>
+                    </div>
                     <h1>{{ item.title }}</h1>
                     <div class="information">
                         <div class="date-and-contributor">
                             <div class="date">
-                                <p>{{ item.upload_date.slice(0,10) }}</p>
+                                <p>{{ item.event.date.slice(0,10) }}</p>
                             </div>
                             <div class="contributor">
-                                <p>Oleh <em class="name">{{ item.contributor.username }}</em> | 
+                                <p>Oleh <b>{{ item.contributor.username }}</b> | 
                                     {{ item.reader_count }} pembaca</p>
                             </div>
                         </div>
@@ -126,6 +130,20 @@ export default {
 <style>
 .item-page-view{
     background-color: #282828;
+}
+
+.navigation {
+    display: flex;
+    flex-direction: row;
+
+    * {
+        padding-right: 10px;
+    }
+}
+
+b {
+    font-size: 16px;
+    font-weight: 700;
 }
 
 .main-block {
@@ -298,11 +316,6 @@ export default {
                 font-size: 16px;
                 font-weight: 400;
             }
-
-            .name {
-                font-size: 16px;
-                font-weight: 700;
-            }
         }
     }
         
@@ -316,6 +329,7 @@ export default {
   }
 
   .text-link {
+    color: white;
     text-decoration: underline; /* Add underline to mimic a link */
     cursor: pointer; /* Change cursor on hover for better user experience */
     }

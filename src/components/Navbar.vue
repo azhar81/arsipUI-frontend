@@ -1,14 +1,34 @@
 <template>
   <div class="navbar">
-    <img src="../assets/static/logo_UI.png" alt="Icon" class="icon" />
+    <router-link to="/">
+      <img src="../assets/static/logo_UI.png" alt="Icon" class="icon" />
+    </router-link>
     <div class="nav-links">
       <Dropdown
         title="Tentang UI"
-        :options="['Visi & Misi', 'Etika & Norma', 'Peraturan & Budaya']"
+        :options="[
+          {
+            'text':'Visi & Misi',
+            'url':'/'
+          },
+          {
+            'text':'Etika & Norma',
+            'url':'/'
+          },
+          {
+            'text':'Peraturan & Budaya',
+            'url':'/'
+          }
+        ]"
+        :withArrow="true"
       />
-      <router-link to="/">Home</router-link>
-      <router-link to="/detail/1">About</router-link>
-      <HamburgerIcon></HamburgerIcon>
+      <router-link class="text-link" to="/search">🔎︎</router-link>
+      <Dropdown
+        title="☰"
+        :options="dropdownOptions"
+        :withArrow="false"
+        position='-42px'
+      />
     </div>
   </div>
 </template>
@@ -22,6 +42,29 @@ export default {
   components: {
     Dropdown,
     HamburgerIcon,
+  },
+  data() {
+    return {
+      dropdownOptions: [
+        { 
+          url: "/login",
+          isButton: true,
+          text: "Login",
+          style: {
+            width: '80%',
+            height: '41px',
+            margin: '10px',
+            background: '#fed402',
+            borderRadius: '12px',
+            fontWeight: '700',
+            fontSize: '16px',
+            color: '#000000'
+          }
+        },
+        { text: "⟲ Terakhir dilihat", url: "/" },
+        { text: "✉ Kontak", url: "/" },
+      ],
+    };
   },
 };
 </script>

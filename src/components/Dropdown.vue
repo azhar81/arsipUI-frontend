@@ -1,9 +1,17 @@
 <template>
   <div class="dropdown">
-    <button @click="toggleDropdown">{{ title }}</button>
+    <button @click="toggleDropdown">
+      {{ title }}
+      <span v-if="withArrow" class="arrow-icon">{{ isOpen ? '⮝ ' : '⮟' }}</span>
+    </button>
     <ul v-if="isOpen" class="options">
-      <li v-for="option in options" :key="option" @click="selectOption()">
-        {{ option }}
+      <li v-for="option in options" :key="option" @click="selectOption()" :style="cssProps">
+        <router-link :to="option.url" class="text-link">
+          <button v-if="option.isButton" :style="option.style" class="centered-button">
+            {{ option.text }}
+          </button>
+          <span v-else>{{ option.text }}</span>
+        </router-link>
       </li>
     </ul>
   </div>
@@ -26,12 +34,28 @@ export default {
   },
   props: {
     title: String,
-    options: Array,
+    options: [Object],
+    withArrow: Boolean,
+    position: {
+      type: String,
+      default: '50%'
+    }
   },
+  computed: {
+    cssProps() {
+      return {
+        '--position': this.position,
+      }
+    }
+  }
 };
 </script>
 
 <style scoped>
+.centered-button {
+  display: block;
+  margin: 0 auto; /* Center the button horizontally */
+}
 .dropdown {
   position: relative;
   display: inline-block; /* Keeps the dropdown in line with the button */
@@ -50,10 +74,10 @@ button {
 }
 .options {
   top: calc(100% + 5px);
-  left: 50%;
   transform: translateX(-50%);
   display: flex;
   flex-direction: row;
+  left: v-bind(position);
 
   width: 189px;
   height: auto;
