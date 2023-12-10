@@ -97,8 +97,4 @@ export default {
 
 <style scoped>
 @import "../assets/landing.css";
-
-.main-div {
-  margin-bottom: 100px;
-}
 </style>

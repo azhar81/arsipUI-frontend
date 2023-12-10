@@ -253,9 +253,11 @@ b {
     }
 
     h1 {
+        text-align: left;
         font-size: 40px;
         font-weight: 700;
         color: #FFFFFF;
+        margin: 0;
 
     }
 
@@ -325,6 +327,8 @@ b {
         max-height: 400px;
         padding-right: 10px;
         color: #ffffff;
+        min-width: 38vw;
+        min-height: 30vh;
     }
   }
 

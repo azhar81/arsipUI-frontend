@@ -3,7 +3,7 @@ import axios from 'axios';
 const storedUser = localStorage.getItem('user')
 const state = {
     user: storedUser ? JSON.parse(storedUser) : null,
-    token: localStorage.getItem('token') || null,
+    token: JSON.parse(localStorage.getItem('token')) || null,
 };
 
 const mutations = {
@@ -13,7 +13,7 @@ const mutations = {
     },
     SET_TOKEN(state, token) {
         state.token = token;
-        localStorage.setItem('token', token);
+        localStorage.setItem('token', JSON.stringify(token));
     },
     LOGOUT(state) {
         state.user = null;
@@ -27,12 +27,18 @@ const actions = {
     async login({ commit }, credentials) {
         try {
         const response = await axios.post(import.meta.env.VITE_API_AUTH_URL, credentials);
-        const { user: user, access: token } = response.data;
+        const { user, refresh, access } = response.data;
+
+        const token = {
+            'access': access,
+            'refresh': refresh
+        };
 
         commit('SET_USER', user);
         commit('SET_TOKEN', token);
 
         return Promise.resolve();
+
         } catch (error) {
             if (error.response) {
                 // The request was made and the server responded with an error
@@ -54,11 +60,36 @@ const actions = {
         commit('LOGOUT');
     },
 
-    initAxios() {
+    async refreshAccessToken({ commit, state }) {
+        try {
+            const response = await axios.post(import.meta.env.VITE_API_AUTH_URL + 'refresh/', {
+                refresh: state.token.refresh, // Assuming the refresh token is stored in the token field
+            });
+
+            const newAccessToken = response.data.access;
+
+            commit('SET_TOKEN', {
+                access: newAccessToken,
+                refresh: state.token.refresh,
+            });
+
+            return Promise.resolve(newAccessToken);
+        } catch (error) {
+          // Handle refresh error
+          return Promise.reject(error);
+        }
+      },
+    
+      async initAxios({ dispatch, state }) {
+        if (!state.token) {
+          // If the user is not authenticated, there's no token to attach to the requests
+          return;
+        }
+      
         // Intercept requests to add authentication details
         axios.interceptors.request.use(
           (config) => {
-            const token = localStorage.getItem('token');
+            const token = state.token.access;
             if (token) {
               config.headers.Authorization = `Bearer ${token}`;
             }
@@ -68,13 +99,34 @@ const actions = {
             return Promise.reject(error);
           }
         );
-    
+      
         // Intercept responses for additional handling if needed
         axios.interceptors.response.use(
           (response) => {
             return response;
           },
-          (error) => {
+          async (error) => {
+            const originalRequest = error.config;
+      
+            // Check if the error is due to an expired token
+            if (error.response && error.response.status === 401 && !originalRequest._retry) {
+              originalRequest._retry = true;
+      
+              try {
+                // Refresh the token using the refreshAccessToken action
+                const newAccessToken = await dispatch('refreshAccessToken');
+      
+                // Retry the original request with the new token
+                originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+                return axios(originalRequest);
+              } catch (refreshError) {
+                // Handle refresh error, e.g., redirect to login
+                console.error('Token refresh failed:', refreshError);
+                dispatch('logout'); // Logout the user or handle as needed
+                return Promise.reject(refreshError);
+              }
+            }
+      
             return Promise.reject(error);
           }
         );
@@ -84,6 +136,7 @@ const actions = {
 const getters = {
     isAuthenticated: state => !!state.token,
     getUser: state => state.user,
+    getRefreshToken: state => state.token,
 };
 
 export default {

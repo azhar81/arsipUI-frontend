@@ -4,6 +4,7 @@ import ItemPage from "./pages/ItemPage.vue";
 import SearchPage from "./pages/SearchPage.vue";
 import LoginPage from "./pages/LoginPage.vue";
 import CreatePage from "./pages/CreatePage.vue";
+import ContributionsPage from "./pages/ContributionsPage.vue";
 
 const routes = [
   { path: "/", component: Home },
@@ -11,6 +12,7 @@ const routes = [
   { path: "/search", component: SearchPage },
   { path: "/login", component: LoginPage },
   { path: "/create", component: CreatePage },
+  { path: "/contributions", component: ContributionsPage },
 ];
 
 const router = createRouter({

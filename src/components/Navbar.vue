@@ -93,7 +93,7 @@ export default {
         switch (userType) {
           case 'contributor':
             return [
-              { text: "🗎 Unggahan sejarah", url: "/"},
+              { text: "🗎 Unggahan sejarah", url: "/contributions"},
               { text: "⟲ Terakhir dilihat", url: "/" },
               { text: "✉ Kontak", url: "/" },
               { text: "↦ Keluar", url: "/" , isLogout: true }

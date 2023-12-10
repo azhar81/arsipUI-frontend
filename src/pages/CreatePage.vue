@@ -3,7 +3,6 @@
     <div class="create-page-view">
         <div class="create-form-div">
             <h1>Unggah Sejarah</h1>
-
             <form @submit.prevent="submitForm" class="form-container" enctype="multipart/form-data">
                 <div class="form-group">
                     <label for="title">Judul</label>
@@ -95,7 +94,17 @@
 
                 <button type="submit">Submit</button>
             </form>
+        </div>
+    </div>
+    <div class="success-container" v-if="createSejarahSuccess">
+        <div class="success-content">
+            <h1>Berhasil Diajukan!</h1>
+            <p>Pengajuan verifikasi sejarah telah terkirim.
+            Silahkan menunggu hingga pemberitahuan selanjutnya.</p>
 
+            <router-link to="/" class="dash-router">
+                <button class="dash-button">Kembali ke beranda</button>
+            </router-link>
         </div>
     </div>
 </template>
@@ -127,6 +136,7 @@ export default {
       categoryOption: 'existing',
       existingEvents: [],
       existingCategory: [],
+      createSejarahSuccess: false
     };
   },
   methods: {
@@ -155,15 +165,11 @@ export default {
                         itemData.append('event_category', this.formData.selectedCategory);
                     }
                 }
-                        
-                
-                console.log(itemData);
 
                 axios.post(import.meta.env.VITE_API_URL + "create", itemData)
                     .then(response => {
                         console.log('Item posted successfully:', response.data);
-                        // Handle success, such as navigating to another page
-                        this.$router.push('/');
+                        this.createSejarahSuccess = true;
                     })
                     .catch(error => {
                         console.error('Error posting item:', error.response.data);
@@ -212,13 +218,63 @@ export default {
         },
         handleFileChange(event) {
             this.formData.media = event.target.files;
-            console.log(this.formData.media)
         }
     },
 };
 </script>
 
 <style>
+.success-container {
+    
+  display: flex;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.success-content {
+    background-color: #fff;
+    color: black;
+    margin: auto;
+    width: 40%;
+    padding: 5%;
+    border-radius: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    
+    * {
+        margin: 20px;
+    }
+
+    .dash-router {
+        text-decoration: none;
+        color: inherit;
+        cursor: pointer;
+    }
+
+    .dash-button {
+        display: block;
+        margin: auto;
+        width: 50%;
+        height: 66px;
+        border-radius: 12px;
+        gap: 10px;
+        background-color: #FED402;
+
+        font-size: 20px;
+        font-weight: 700;
+        line-height: 26px;
+        text-align: center;
+
+    }
+}
+
 #app {
   padding: 0;
 }
@@ -286,15 +342,11 @@ h1 {
     display: flex;
     flex-direction: column;
     background-color: white;
-    margin: 180px auto;
+    margin: 180px auto 50px auto;
     padding: 30px;
     width: 60%;
     border-radius: 20px;
     /* gap: 80px */
 }
 
-.create-page-view {
-  /* min-height: 100vh;
-  min-width: 100vw; */
-}
 </style>
