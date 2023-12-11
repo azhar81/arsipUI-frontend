@@ -162,7 +162,7 @@ export default {
                         itemData.append('event_category', this.formData.selectedCategory);
                     }
                     else {
-                        itemData.append('event_category', this.formData.selectedCategory);
+                        itemData.append('event_category', this.formData.customEventCategory);
                     }
                 }
 

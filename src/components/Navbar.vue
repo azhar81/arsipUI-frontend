@@ -101,8 +101,9 @@ export default {
 
           case 'verificator':
             return [
+              { text: "🗹 Verifikasi sejarah", url: "/verifications"},
               { text: "✉ Kontak", url: "/" },
-              { text: "↦ Keluar", url: "/" }
+              { text: "↦ Keluar", url: "/" , isLogout: true }
             ];
         }
       } else {
@@ -129,19 +130,4 @@ export default {
 
 <style scoped>
 @import "../assets/navbar.css";
-
-.create-sejarah {
-  border: 1px solid #FED402;
-  width: 206px;
-  height: 44px;
-  padding: 10px, 20px, 10px, 20px;
-  border-radius: 12px;
-  gap: 12px;
-  color: #FED402;
-  text-decoration: none;
-  cursor: pointer;
-  font-size: 16px;
-  font-weight: 700;
-  text-align: center;
-}
 </style>

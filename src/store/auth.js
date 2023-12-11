@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const storedUser = localStorage.getItem('user')
 const state = {
-    user: storedUser ? JSON.parse(storedUser) : null,
+    user: JSON.parse(localStorage.getItem('user')) || null,
     token: JSON.parse(localStorage.getItem('token')) || null,
 };
 
@@ -58,6 +58,7 @@ const actions = {
 
     logout({ commit }) {
         commit('LOGOUT');
+        console.log(state.user)
     },
 
     async refreshAccessToken({ commit, state }) {

@@ -1,29 +1,22 @@
 <template>
-    <Navbar />
     <div class="login-page-view">
-        <form @submit.prevent="onLogin">
-            <label for="username">Username:</label>
-            <input type="text" v-model="username" required>
-            
-            <label for="password">Password:</label>
-            <input type="password" v-model="password" required>
-            
-            <button type="submit">Login</button>
+      <div class="aesthetic-background">
+      </div>
+      <div class="login-div">
+        <form @submit.prevent="onLogin" class="login-form">
+          <label for="username">Username:</label>
+          <input type="text" v-model="username" required class="login-input">
+          
+          <label for="password">Password:</label>
+          <input type="password" v-model="password" required class="login-input">
+          
+          <button type="submit">Login</button>
+          <div v-if="error" class="error-message">
+          {{ this.error }}
+          </div>
         </form>
-        <div v-if="error">
-        {{ this.error }}
-        </div>
-        <div v-if="isAuthenticated">
-            <!-- Content for authenticated users -->
-            <h1>AUTHENTICATED</h1>
-            <h2>{{ getUser }}</h2>
-            
-            <button @click="onLogout">Logout</button>
-        </div>
-        <div v-else>
-            womp womp
-        </div>
-    </div>
+      </div>
+  </div>
 </template>
 
 <script>
@@ -71,6 +64,51 @@ export default {
 
 <style>
 .login-page-view {
-    margin-top: 170px;
+  color: black;
+  display: flex;
+  flex-direction: row;
+    .aesthetic-background {
+      width: 50vw;
+      height: 100vh;
+      background-image: url("../assets/static/music.png");
+      background-size: 50vw;
+      background-position: left;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+    }
+
+    .login-div {
+      display: flex;
+      flex-direction: column;
+      width: 50vw;
+      height: 100vh;
+      background-color: white;
+      
+      align-items: center;
+    }
+
+    .login-form {
+      margin: auto;
+      font-size: 20px;
+      font-weight: 700;
+
+      width: 60%;
+      display: flex;
+      flex-direction: column;
+      padding: 10%;
+
+      .login-input {
+        width: 100%;
+        padding: 10px;
+        border-radius: 12px;
+        border: 1px solid;
+        margin-bottom: 20px;
+      }
+    }
 }
+
+.error-message {
+  position: relative;
+}
+
 </style>

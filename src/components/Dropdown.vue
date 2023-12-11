@@ -12,7 +12,7 @@
           </button>
           <span v-else-if="option.isProfile" :style="option.style">
             {{ option.username }}
-            {{ option.userType == 'contributor' ? 'Kontributor' : 'Verifikator' }}
+            <b>{{ option.userType == 'contributor' ? 'Kontributor' : 'Verifikator' }}</b>
           </span>
           <span v-else-if="option.isLogout" @click="onLogout">{{option.text}}</span>
           <span v-else>{{ option.text }}</span>
@@ -41,8 +41,8 @@ export default {
     async onLogout() {
       try {
         await this.logout();
-        this.$router.go()
-        this.$router.push('/')
+        this.$router.go();
+        this.$router.push('/');
       } catch (error) {
         // Handle logout error (display error message, etc.)
         console.error('Logout error:', error.message);

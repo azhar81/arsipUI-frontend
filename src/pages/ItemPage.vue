@@ -37,12 +37,55 @@
                                 <p>{{ item.event.date.slice(0,10) }}</p>
                             </div>
                             <div class="contributor">
-                                <p>Oleh <b>{{ item.contributor.username }}</b> | 
-                                    {{ item.reader_count }} pembaca</p>
+                                <p>Oleh <b>{{ item.contributor.username }}</b>
+                                    <div v-if="item.status !== 'waitlist'"> | {{ item.reader_count }} pembaca</div></p>
                             </div>
                         </div>
                     </div>
                     <div v-html="item.formatted_content" class="description">
+                    </div>
+                </div>
+                <div v-if="userType == 'verificator' && item.status == 'waitlist'" class="verifikasi-sejarah-div">
+                    <div v-if="approved">
+                        <div class="verifikasi-text-div">
+                            <h2 class="checkmark-on-approved">🗹</h2>
+                            <h2 class="verifikasi-sejarah-text">Verifikasi Disetujui</h2>
+                            <p class="extra-text">Sejarah akan segera diunggah secara publik.</p>
+                        </div>
+                    </div>
+                    <div v-else-if="item.status == 'rejected' || rejected ">
+                        <div class="verifikasi-text-div">
+                            <h2 class="x-on-rejected">🗷</h2>
+                            <h2 class="verifikasi-sejarah-text">Verifikasi Ditolak</h2>
+                        </div>
+                    </div>
+                    <div v-else-if="rejecting">
+                        <div class="verifikasi-text-div">
+                            <h2 class="verifikasi-sejarah-text">Verifikasi Sejarah?</h2>
+                        </div>
+                        <div class="verification-buttons">
+                            <button @click="tolakCancel" class="tolak-cancel">
+                                Tolak
+                            </button>
+                            <form id="updateForm" class="tolak-form">
+                                <textarea type="text" id="reject_reason" v-model="reject_reason" class="textarea-tolak" placeholder="Tulis masukan di sini" required></textarea>
+
+                                <button type="button" @click="submitForm" class="submit-button">Kirim</button>
+                            </form>
+                        </div>
+                    </div>
+                    <div v-else>
+                        <div class="verifikasi-text-div">
+                            <h2 class="verifikasi-sejarah-text">Verifikasi Sejarah?</h2>
+                        </div>
+                        <div class="verification-buttons">
+                            <button @click="tolak" class="tolak-button">
+                                Tolak
+                            </button>
+                            <button @click="setuju" class="setuju-button">
+                                Setuju
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -53,6 +96,7 @@
   
 <script>
 import axios from "axios";
+import { mapGetters }  from "vuex"
 import Navbar from "../components/Navbar.vue";
 
 import FullImagePopup from '../components/FullImagePopup.vue';
@@ -75,7 +119,17 @@ export default {
         loading: true,
         showModal: false,
         modalImageUrl: '',
+        approved: false,
+        rejecting: false,
+        rejected: false,
+        reject_reason: '',
     };
+  },
+  computed: {
+    ...mapGetters('auth', ['isAuthenticated', 'getUser']),
+    userType() {
+        return this.isAuthenticated ? this.getUser.user_type : null
+    },
   },
   mounted() {
     this.fetchData();
@@ -95,7 +149,32 @@ export default {
                 this.loading = false;
             })
         .catch((error) => {
-          console.error("Error fetching data:", error);
+            this.router.go()
+        });
+    },
+    submitForm() {
+      // Assuming you have the API endpoint URL
+      const url = import.meta.env.VITE_API_URL + this.item.id + '/reject';
+
+      // Data to be sent in the PATCH request
+      const dataToUpdate = {
+        reject_reason: this.reject_reason,
+        // Add other fields if needed
+      };
+
+      // Make the PATCH request
+      axios
+        .patch(url, dataToUpdate)
+        .then(response => {
+          // Handle success
+          console.log('PATCH request successful:', response.data);
+          
+          this.rejected = true
+        })
+        .catch(error => {
+          // Handle error
+          console.error('Error making PATCH request:', error.response.data);
+          // Optionally, display an error message to the user
         });
     },
     scrollLeft() {
@@ -123,219 +202,27 @@ export default {
     closeModal() {
         this.showModal = false;
     },
+    setuju() {
+        this.approved = true;
+        axios
+        .get(import.meta.env.VITE_API_URL + this.item.id + '/approve')
+        .then((response) => {
+                this.approved = true;
+            })
+        .catch((error) => {
+            this.router.go()
+        });
+    },
+    tolak() {
+        this.rejecting = true;
+    },
+    tolakCancel() {
+        this.rejecting = false;
+    }
   }
 };
 </script>
   
 <style>
-.item-page-view{
-    background-color: #282828;
-}
-
-.navigation {
-    display: flex;
-    flex-direction: row;
-
-    * {
-        padding-right: 10px;
-    }
-}
-
-b {
-    font-size: 16px;
-    font-weight: 700;
-}
-
-.main-block {
-  box-sizing: border-box;
-  padding: 20px;
-  margin: 8% auto 0 0;
-  display: grid;
-  grid-template-columns: 50% 50%;
-  gap: auto;
-
-  .images-block {
-    height: 732px;
-    width: 706px;
-    margin: 0 auto;
-    position: relative;
-
-    /* Center content vertically using Flexbox */
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-
-    img {
-      border-radius: 12px;
-      display: block;
-      margin: auto;
-    }
-
-    .main-image-block {
-      .main-image {
-        width: 706px;
-        max-height: 530px;
-      }
-    }
-
-    .small-images-block {
-        width: 706px;
-        position: relative;
-    }
-
-    .scroll-buttons {
-        display: flex;
-        align-items: center;
-    }
-
-    .scroll-buttons button {
-        padding: 5px 10px;
-        cursor: pointer;
-        margin: 10px;
-        background: #fed402;
-        border-radius: 12px;
-        font-weight: 1000;
-        font-size: 20px;
-        color: #000000;
-    }
-
-    .scroll-button-left {
-        position: absolute;
-        z-index: 1;
-        left: 0;
-    }
-    .scroll-button-right {
-        position: absolute;
-        z-index: 1;
-        right: 0;
-    }
-
-    .image-list {
-        height: auto;
-        width: 100%;
-        overflow-x: hidden; /* Hide the standard scrollbar */
-        white-space: nowrap;
-        position: relative;
-        z-index: 0;
-        margin-top: 20px;
-    }
-
-    .image-list ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-        display: flex;
-    }
-
-    .image-list li {
-        margin-right: 20px;
-    }
-
-    .image-list img {
-        height: 185px;
-        width: auto;
-        border-radius: 6px;
-    }
-  }
-
-  .content-block {
-    width: 706px;
-    margin: 0 auto;
-    align-items: center;
-    justify-content: center;
-    display: flex;
-
-    .information-block {
-        margin: auto 0;
-        display: flex;
-        flex-direction: column;
-    }
-
-    h1 {
-        text-align: left;
-        font-size: 40px;
-        font-weight: 700;
-        color: #FFFFFF;
-        margin: 0;
-
-    }
-
-    .information {
-        display: flex;
-
-        font-weight: 400;
-        font-size: 12px;
-
-        color: #ffffff;
-        margin-bottom: 20px; 
-
-        display: flex;
-        flex-direction: column;
-        justify-content: left;
-
-        .date-and-contributor {
-            display: flex;
-            justify-content: left;
-            align-items: center;
-        }
-
-        .date,
-        .contributor {
-            margin-right: 10px; /* Add some spacing between date and contributor */
-        }
-
-        .reader-count {
-            margin-top: 10px; /* Add spacing between date-and-contributor and reader-count */
-        }
-
-        .date {
-            display: flex;
-            flex-direction: row;
-            justify-content: center;
-            align-items: center;
-
-            width: 95px;
-            height: 41px;
-            padding: 10px;
-            border-radius: 8px;
-            gap: 10px;
-
-            background: #fed402;
-            border-radius: 4px;
-
-            /* Inside auto layout */
-            flex: none;
-            order: 0;
-            flex-grow: 0;
-
-            font-size: 16px;
-            font-weight: 400;
-            line-height: 21px;
-            color: #000000;
-
-            .extra {
-                font-size: 16px;
-                font-weight: 400;
-            }
-        }
-    }
-        
-    .description {
-        text-align: justify;
-        overflow: auto;
-        max-height: 400px;
-        padding-right: 10px;
-        color: #ffffff;
-        min-width: 38vw;
-        min-height: 30vh;
-    }
-  }
-
-  .text-link {
-    color: white;
-    text-decoration: underline; /* Add underline to mimic a link */
-    cursor: pointer; /* Change cursor on hover for better user experience */
-    }
-}
+@import "../assets/itempage.css";
 </style>
