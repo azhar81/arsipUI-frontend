@@ -62,8 +62,8 @@
     margin: auto;
 }
 
-.search-container {
-    margin: 180px auto 50px auto;
+.search-container-1 {
+    margin: 180px auto 10px auto;
     width: fit-content;
     display: flex;
     flex-direction: row;
@@ -98,5 +98,44 @@
         font-weight: 700;
         font-size: 16px;
         color: #000000;
+    }
+}
+
+.filter-div {
+    display: flex;
+    gap: 30px;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+    .filter-word {
+        font-size: 20px;
+        font-weight: 700;
+        width: 10%;
+    }
+}
+
+.filter-option {
+    justify-content: center;
+    align-items: center;
+    width: 60%;
+
+    label {
+        font-size: 16px;
+        font-weight: 400;
+        justify-content: center;
+    }
+
+    select {
+        width: 114px;
+        height: 41px;
+        border-radius: 12px;
+    }
+
+    select option {
+        width: 366px;
+        padding: 20px;
+        border-radius: 18px;
+        font-size: 16px;
+        font-weight: 400;
     }
 }

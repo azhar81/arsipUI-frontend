@@ -58,7 +58,6 @@ const actions = {
 
     logout({ commit }) {
         commit('LOGOUT');
-        console.log(state.user)
     },
 
     async refreshAccessToken({ commit, state }) {
