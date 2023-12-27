@@ -63,52 +63,5 @@ export default {
 </script>
 
 <style>
-.login-page-view {
-  color: black;
-  display: flex;
-  flex-direction: row;
-    .aesthetic-background {
-      width: 50vw;
-      height: 100vh;
-      background-image: url("../assets/static/music.png");
-      background-size: 50vw;
-      background-position: left;
-      background-repeat: no-repeat;
-      background-attachment: fixed;
-    }
-
-    .login-div {
-      display: flex;
-      flex-direction: column;
-      width: 50vw;
-      height: 100vh;
-      background-color: white;
-      
-      align-items: center;
-    }
-
-    .login-form {
-      margin: auto;
-      font-size: 20px;
-      font-weight: 700;
-
-      width: 60%;
-      display: flex;
-      flex-direction: column;
-      padding: 10%;
-
-      .login-input {
-        width: 100%;
-        padding: 10px;
-        border-radius: 12px;
-        border: 1px solid;
-        margin-bottom: 20px;
-      }
-    }
-}
-
-.error-message {
-  position: relative;
-}
-
+@import "../assets/loginpage.css";
 </style>
