@@ -7,7 +7,10 @@
         <div class="main-block">
             <div class="images-block">
                 <div class="main-image-block">
-                    <img :src="main_image.file" @click="openModal(main_image.file)" class="main-image">
+                    <img :src="main_image.file" @click="openModal(main_image.file)" class="main-image" v-if="main_image.file_type=='img'">
+                    <video v-if="main_image.file_type=='vid'" class="main-image" controls>
+                        <source :src="main_image.file" :type="getVideoType(main_image.file)">
+                    </video>
                 </div>
                 <div class="small-images-block" v-if="images.length > 0">
                     <div class="scroll-buttons">
@@ -15,7 +18,10 @@
                         <div class="image-list" ref="imageList">
                             <ul>
                                 <li v-for="(image, index) in images" :key="index">
-                                    <img :src="image.file" @click="openModal(image.file)" alt="Small Image" />
+                                    <img v-if="image.file_type=='img'" :src="image.file" @click="openModal(image.file)" alt="Small Image" />
+                                    <video v-if="image.file_type=='vid'" alt="Small Video" controls>
+                                        <source :src="image.file">
+                                    </video>
                                 </li>
                             </ul>
                         </div>
@@ -195,8 +201,8 @@ export default {
             this.showScrollRightButton = this.$refs.imageList.scrollLeft < (this.$refs.imageList.scrollWidth - this.$refs.imageList.clientWidth);
         });
     },
-    openModal(imageUrl) {
-        this.modalImageUrl = imageUrl;
+    openModal(fileUrl) {
+        this.modalImageUrl = fileUrl;
         this.showModal = true;
     },
     closeModal() {
@@ -218,7 +224,21 @@ export default {
     },
     tolakCancel() {
         this.rejecting = false;
-    }
+    },
+    getVideoType(filePath) {
+      // Extract the file extension from the file path
+      const fileExtension = filePath.split('.').pop().toLowerCase();
+
+      // Map file extensions to corresponding video MIME types
+      const extensionToTypeMap = {
+        mp4: 'video/mp4',
+        webm: 'video/webm',
+        // Add more mappings as needed
+      };
+
+      // Use the mapped MIME type or a default type
+      return extensionToTypeMap[fileExtension] || 'video/mp4';
+    },
   }
 };
 </script>

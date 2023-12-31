@@ -202,6 +202,12 @@ b {
         width: auto;
         border-radius: 6px;
     }
+
+    .image-list video {
+        height: 185px;
+        width: auto;
+        border-radius: 6px;
+    }
   }
 
   .content-block {
