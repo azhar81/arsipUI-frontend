@@ -11,7 +11,7 @@
 
                 <div class="form-group">
                     <label for="description">Isi Konten</label>
-                    <textarea v-model="formData.description" id="description" required></textarea>
+                    <quill-editor theme="snow" contentType="html" v-model:content="formData.description" id="description" required/>
                 </div>
 
                 <div class="form-group">
@@ -121,10 +121,13 @@
 <script>
 import axios from 'axios';
 import Navbar from "../components/Navbar.vue";
+import { QuillEditor } from '@vueup/vue-quill';
+import '@vueup/vue-quill/dist/vue-quill.snow.css';
 
 export default {
   components: {
     Navbar,
+    QuillEditor
   },
   mounted() {
     this.fetchData();
@@ -248,7 +251,7 @@ export default {
         },
         handleFileChange(event) {
             this.formData.media = event.target.files;
-        }
+        },
     },
 };
 </script>
