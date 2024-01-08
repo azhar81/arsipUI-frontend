@@ -72,7 +72,7 @@ export default {
                 { value: 'FISIP', label: 'Fakultas Ilmu Sosial dan Ilmu Politik' },
                 { value: 'FPsi', label: 'Fakultas Psikologi' },
                 { value: 'Fasilkom', label: 'Fakultas Ilmu Komputer' },
-                { value: 'FMIPA', label: 'Fakultas Matematika Dan Ilmu Pengetahuan Alam' },
+                { value: 'FMIPA', label: 'Fakultas Matematika dan Ilmu Pengetahuan Alam' },
                 { value: 'FIB', label: 'Fakultas Ilmu Budaya' },
                 { value: 'FKM', label: 'Fakultas Kesehatan Masyarakat' },
                 { value: 'FKG', label: 'Fakultas Kedokteran Gigi' },
@@ -98,6 +98,7 @@ export default {
                 })
                 .catch((error) => {
                     console.error("Error fetching data:", error);
+                    this.$router.go();
                 });
         },
         handleSearch() {

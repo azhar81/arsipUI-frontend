@@ -76,7 +76,7 @@
         color: #FED402;
     }
 
-    input {
+    .search-input {
         position: relative;
         width: 50vw;
         height: 44px;
@@ -87,7 +87,7 @@
 
         font-size: 16px;
         font-weight: 400;
-        color: #8A8A8A;
+        color: black;
     }
 
     button {
@@ -113,6 +113,7 @@
         width: 10%;
     }
 }
+
 
 .filter-option {
     justify-content: center;

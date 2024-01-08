@@ -3,7 +3,7 @@
     <div class="search-page-view">
         <div class="search-container-1">
             <h1>Temu Balik</h1>
-            <input v-model="searchTerm" @keydown.enter="handleSearch" placeholder="🔎︎ Cari sejarah di sini">
+            <input v-model="searchTerm" @keydown.enter="handleSearch" placeholder="🔎︎ Cari sejarah di sini" class="search-input">
             <button @click="handleSearch">Search</button>
         </div>
         <div class="filter-div">
@@ -64,7 +64,7 @@ export default {
                 { value: 'FISIP', label: 'Fakultas Ilmu Sosial dan Ilmu Politik' },
                 { value: 'FPsi', label: 'Fakultas Psikologi' },
                 { value: 'Fasilkom', label: 'Fakultas Ilmu Komputer' },
-                { value: 'FMIPA', label: 'Fakultas Matematika Dan Ilmu Pengetahuan Alam' },
+                { value: 'FMIPA', label: 'Fakultas Matematika dan Ilmu Pengetahuan Alam' },
                 { value: 'FIB', label: 'Fakultas Ilmu Budaya' },
                 { value: 'FKM', label: 'Fakultas Kesehatan Masyarakat' },
                 { value: 'FKG', label: 'Fakultas Kedokteran Gigi' },
@@ -118,7 +118,8 @@ export default {
         },
         getUniqueYears(items) {
             const uniqueYears = [...new Set(items.map(item => new Date(item.event.date).getFullYear()))];
-            return uniqueYears;
+            const sortedUniqueYears = uniqueYears.sort((a, b) => b - a);
+            return sortedUniqueYears;
         },
         filterByFakultas() {
             if (this.selectedFakultas != '') {

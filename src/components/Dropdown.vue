@@ -41,8 +41,7 @@ export default {
     async onLogout() {
       try {
         await this.logout();
-        this.$router.go();
-        this.$router.push('/');
+        // this.$router.go();
       } catch (error) {
         // Handle logout error (display error message, etc.)
         console.error('Logout error:', error.message);

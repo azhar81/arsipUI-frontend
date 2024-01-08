@@ -125,54 +125,78 @@ import { QuillEditor } from '@vueup/vue-quill';
 import '@vueup/vue-quill/dist/vue-quill.snow.css';
 
 export default {
-  components: {
-    Navbar,
-    QuillEditor
-  },
-  mounted() {
-    this.fetchData();
-  },
-  data() {
-    return {
-      formData: {
-        title: '',
-        description: '',
-        media: [],
-        selectedEvent: '',
-        selectedFakultas: '',
-        customEventName: '',
-        customEventCategory: '',
-        customEventDate: new Date(),
-        selectedCategory: ''
-      },
-      eventOption: 'existing',
-      categoryOption: 'existing',
-      existingEvents: [],
-      existingCategory: [],
-      createSejarahSuccess: false,
-      fakultasOptions: [
-        { value: 'FK', label: 'Fakultas Kedokteran' },
-        { value: 'FF', label: 'Fakultas Farmasi' },
-        { value: 'FIPB', label: 'Fakultas Ilmu Pengetahuan Budaya' },
-        { value: 'FH', label: 'Fakultas Hukum' },
-        { value: 'FT', label: 'Fakultas Teknik' },
-        { value: 'FEB', label: 'Fakultas Ekonomi dan Bisnis' },
-        { value: 'FISIP', label: 'Fakultas Ilmu Sosial dan Ilmu Politik' },
-        { value: 'FPsi', label: 'Fakultas Psikologi' },
-        { value: 'Fasilkom', label: 'Fakultas Ilmu Komputer' },
-        { value: 'FMIPA', label: 'Fakultas Matematika Dan Ilmu Pengetahuan Alam' },
-        { value: 'FIB', label: 'Fakultas Ilmu Budaya' },
-        { value: 'FKM', label: 'Fakultas Kesehatan Masyarakat' },
-        { value: 'FKG', label: 'Fakultas Kedokteran Gigi' },
-        { value: 'FIK', label: 'Fakultas Ilmu Keperawatan' },
-        { value: 'FIA', label: 'Fakultas Ilmu Administrasi' },
-        { value: 'PPV', label: 'Program Pendidikan Vokasi' },
-        { value: 'SIL', label: 'Sekolah Ilmu Pengetahuan' },
-        { value: 'SKSG', label: 'Sekolah Kajian Stratejik dan Global' },
-      ],
-    };
-  },
-  methods: {
+    components: {
+        Navbar,
+        QuillEditor
+    },
+    mounted() {
+        this.fetchData();
+    },
+    data() {
+        return {
+        formData: {
+            title: '',
+            description: '',
+            media: [],
+            selectedEvent: '',
+            selectedFakultas: '',
+            customEventName: '',
+            customEventCategory: '',
+            customEventDate: new Date(),
+            selectedCategory: ''
+        },
+        eventOption: 'existing',
+        categoryOption: 'existing',
+        existingEvents: [],
+        existingCategory: [],
+        createSejarahSuccess: false,
+        fakultasOptions: [
+            { value: 'FK', label: 'Fakultas Kedokteran' },
+            { value: 'FF', label: 'Fakultas Farmasi' },
+            { value: 'FIPB', label: 'Fakultas Ilmu Pengetahuan Budaya' },
+            { value: 'FH', label: 'Fakultas Hukum' },
+            { value: 'FT', label: 'Fakultas Teknik' },
+            { value: 'FEB', label: 'Fakultas Ekonomi dan Bisnis' },
+            { value: 'FISIP', label: 'Fakultas Ilmu Sosial dan Ilmu Politik' },
+            { value: 'FPsi', label: 'Fakultas Psikologi' },
+            { value: 'Fasilkom', label: 'Fakultas Ilmu Komputer' },
+            { value: 'FMIPA', label: 'Fakultas Matematika dan Ilmu Pengetahuan Alam' },
+            { value: 'FIB', label: 'Fakultas Ilmu Budaya' },
+            { value: 'FKM', label: 'Fakultas Kesehatan Masyarakat' },
+            { value: 'FKG', label: 'Fakultas Kedokteran Gigi' },
+            { value: 'FIK', label: 'Fakultas Ilmu Keperawatan' },
+            { value: 'FIA', label: 'Fakultas Ilmu Administrasi' },
+            { value: 'PPV', label: 'Program Pendidikan Vokasi' },
+            { value: 'SIL', label: 'Sekolah Ilmu Pengetahuan' },
+            { value: 'SKSG', label: 'Sekolah Kajian Stratejik dan Global' },
+        ],
+        };
+    },
+    methods: {
+        async beforeRouteEnter(to, from, next) {
+            try {
+                // Perform asynchronous operations, such as user authentication
+                await this.$store.dispatch('auth/initAxios');
+
+                // Check if the user is authenticated
+                const isAuthenticated = this.$store.getters['auth/isAuthenticated'];
+
+                if (!isAuthenticated) {
+                    // Redirect to login or display an error message
+                    console.error('User is not authenticated');
+                    next('/');
+                } else {
+                    // Continue with the navigation
+                    next();
+                }
+            } 
+            catch (error) {
+                // Handle errors
+                console.error('Error during beforeRouteEnter:', error);
+                // Redirect to an error page or display an error message
+                next('/');
+            }
+        },
         submitForm() {
         // Handle form submission logic
             if (this.validateForm()) {
@@ -205,7 +229,7 @@ export default {
                         this.createSejarahSuccess = true;
                     })
                     .catch(error => {
-                        console.error('Error posting item:', error.response.data);
+                        console.error('Error posting item:', error.response);
                     });
             }
         },

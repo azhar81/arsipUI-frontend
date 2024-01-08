@@ -201,6 +201,7 @@ b {
         height: 185px;
         width: auto;
         border-radius: 6px;
+        cursor: pointer;
     }
 
     .image-list video {

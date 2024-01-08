@@ -1,6 +1,5 @@
 import axios from 'axios';
 
-const storedUser = localStorage.getItem('user')
 const state = {
     user: JSON.parse(localStorage.getItem('user')) || null,
     token: JSON.parse(localStorage.getItem('token')) || null,
@@ -8,77 +7,78 @@ const state = {
 
 const mutations = {
     SET_USER(state, user) {
-        state.user = user;
-        localStorage.setItem('user', JSON.stringify(user));
+      state.user = user;
+      localStorage.setItem('user', JSON.stringify(user));
     },
     SET_TOKEN(state, token) {
-        state.token = token;
-        localStorage.setItem('token', JSON.stringify(token));
+      state.token = token;
+      localStorage.setItem('token', JSON.stringify(token));
     },
     LOGOUT(state) {
-        state.user = null;
-        state.token = null;
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
+      state.user = null;
+      state.token = null;
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
     },
 };
 
 const actions = {
-    async login({ commit }, credentials) {
-        try {
-        const response = await axios.post(import.meta.env.VITE_API_AUTH_URL, credentials);
-        const { user, refresh, access } = response.data;
+  async login({ commit }, credentials) {
+    try {
+    const response = await axios.post(import.meta.env.VITE_API_AUTH_URL, credentials);
+    const { user, refresh, access } = response.data;
 
-        const token = {
-            'access': access,
-            'refresh': refresh
-        };
+    const token = {
+      'access': access,
+      'refresh': refresh
+    };
 
-        commit('SET_USER', user);
-        commit('SET_TOKEN', token);
+    commit('SET_USER', user);
+    commit('SET_TOKEN', token);
 
-        return Promise.resolve();
+    return Promise.resolve();
 
-        } catch (error) {
-            if (error.response) {
-                // The request was made and the server responded with an error
-                console.error('Server Error:', error.response.data);
-              } else if (error.request) {
-                // The request was made but no response was received
-                console.error('No response from server');
-              } else {
-                // Something happened in setting up the request that triggered an Error
-                console.error('Error during request setup:', error.message);
-              }
-        
-              // Optionally, you can rethrow the error to allow the component to handle it
-              throw error;
+    } catch (error) {
+      if (error.response) {
+          // The request was made and the server responded with an error
+          console.error('Server Error:', error.response.data);
+        } else if (error.request) {
+          // The request was made but no response was received
+          console.error('No response from server');
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          console.error('Error during request setup:', error.message);
         }
+  
+        // Optionally, you can rethrow the error to allow the component to handle it
+        throw error;
+      }
     },
 
-    logout({ commit }) {
-        commit('LOGOUT');
+    async logout({ commit }) {
+      commit('LOGOUT');
+      return Promise.resolve();
     },
 
     async refreshAccessToken({ commit, state }) {
-        try {
-            const response = await axios.post(import.meta.env.VITE_API_AUTH_URL + 'refresh/', {
-                refresh: state.token.refresh, // Assuming the refresh token is stored in the token field
-            });
+      try {
+        const response = await axios.post(import.meta.env.VITE_API_AUTH_URL + 'refresh/', {
+            refresh: state.token.refresh, // Assuming the refresh token is stored in the token field
+        });
 
-            const newAccessToken = response.data.access;
+        const newAccessToken = response.data.access;
 
-            commit('SET_TOKEN', {
-                access: newAccessToken,
-                refresh: state.token.refresh,
-            });
+        commit('SET_TOKEN', {
+            access: newAccessToken,
+            refresh: state.token.refresh,
+        });
 
-            return Promise.resolve(newAccessToken);
-        } catch (error) {
-          // Handle refresh error
-          return Promise.reject(error);
-        }
-      },
+        return Promise.resolve(newAccessToken);
+      } catch (error) {
+        // Handle refresh error
+        return Promise.reject(error);
+      }
+    },
     
       async initAxios({ dispatch, state }) {
         if (!state.token) {
@@ -89,13 +89,21 @@ const actions = {
         // Intercept requests to add authentication details
         axios.interceptors.request.use(
           (config) => {
-            const token = state.token.access;
+            var token = null;
+            try {
+              token = state.token.access;
+            }
+            catch (error) {
+              // token stay null
+            }
+
             if (token) {
               config.headers.Authorization = `Bearer ${token}`;
             }
             return config;
           },
           (error) => {
+            console.log("request error")
             return Promise.reject(error);
           }
         );
@@ -134,15 +142,15 @@ const actions = {
 };
 
 const getters = {
-    isAuthenticated: state => !!state.token,
-    getUser: state => state.user,
-    getRefreshToken: state => state.token,
+  isAuthenticated: state => !!state.token,
+  getUser: state => state.user,
+  getRefreshToken: state => state.token,
 };
 
 export default {
-    namespaced: true,
-    state,
-    mutations,
-    actions,
-    getters,
+  namespaced: true,
+  state,
+  mutations,
+  actions,
+  getters,
 };

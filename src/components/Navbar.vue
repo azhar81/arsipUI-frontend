@@ -89,7 +89,7 @@ export default {
     },
     extraDropdown() {
       if (this.isAuthenticated) {
-        const userType = this.getUser.user_type
+        const userType = this.getUser.user_type;
         switch (userType) {
           case 'contributor':
             return [
@@ -112,18 +112,13 @@ export default {
               { text: "✉ Kontak", url: "/" }
         ];
       }
-    }
-  },
-  data() {
-    return {
-      dropdownOptions: [],
-    };
-  },
-  created() {
-    this.dropdownOptions = [
+    },
+    dropdownOptions() {
+      return [
       this.hamburgerObject,
       ...this.extraDropdown,
     ];
+    }
   },
 };
 </script>
