@@ -77,7 +77,7 @@ export default {
   display: inline-block; /* Keeps the dropdown in line with the button */
 }
 
-button {
+:is(button) {
   background: none;
   border: none;
   margin: 0;

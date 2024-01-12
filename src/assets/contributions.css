@@ -31,7 +31,7 @@
     height: auto;
     margin-top: 20px;
 
-    button {
+    :is(button) {
         border: none;
         margin: 10px auto;
         cursor: pointer;
@@ -62,14 +62,14 @@
     flex-direction: row;
     align-items: center;
 
-    h1 {
+    :is(h1) {
         font-size: 40px;
         font-weight: 700;
         line-height: 52px;
         color: #FED402;
     }
 
-    input {
+    :is(input) {
         position: relative;
         width: 50vw;
         height: 44px;
@@ -83,7 +83,7 @@
         color: #8A8A8A;
     }
 
-    button {
+    :is(button) {
         width: 100px;
         height: 41px;
         background: #fed402;
@@ -112,19 +112,19 @@
     align-items: center;
     width: 60%;
 
-    label {
+    :is(label) {
         font-size: 16px;
         font-weight: 400;
         justify-content: center;
     }
 
-    select {
+    :is(select) {
         width: 114px;
         height: 41px;
         border-radius: 12px;
     }
 
-    select option {
+    :is(select) :is(option) {
         width: 366px;
         padding: 20px;
         border-radius: 18px;

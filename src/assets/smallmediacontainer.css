@@ -6,7 +6,7 @@
     color: inherit;
     cursor: pointer;
   
-    img, video {
+    :is(img, video) {
       width: 220px;
       height: 158px;
       border-radius: 12px;
@@ -15,7 +15,7 @@
   
     .title {
       max-width: 220px;
-      h1 {
+      :is(h1) {
         font-weight: 700;
         font-size: 16px;
         color: #ffffff;
@@ -54,7 +54,7 @@
         order: 0;
         flex-grow: 0;
   
-        p {
+        :is(p) {
           font-weight: 400;
           font-size: 12px;
           color: #000000;

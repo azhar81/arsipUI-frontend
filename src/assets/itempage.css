@@ -131,7 +131,7 @@ b {
     justify-content: center;
     align-items: center;
 
-    img {
+    :is(img) {
       border-radius: 12px;
       display: block;
       margin: auto;
@@ -225,7 +225,7 @@ b {
         flex-direction: column;
     }
 
-    h1 {
+    :is(h1) {
         text-align: left;
         font-size: 40px;
         font-weight: 700;

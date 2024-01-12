@@ -17,7 +17,7 @@
     overflow: hidden;
 }
 
-img {
+:is(img) {
     width: 100%;
     height: auto;
 }
